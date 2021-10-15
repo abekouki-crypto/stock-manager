@@ -1,1 +1,297 @@
+/*====================================================================
+.s_01 .accordion_one
+====================================================================*/
+.s_01 .accordion_one {
+	max-width: 1024px;
+	margin: 0 auto;
+}
+
+.s_01 .accordion_one .accordion_header {
+	background-color: #db0f2f;
+	color: #fff;
+	font-size: 26px;
+	font-weight: bold;
+	padding: 20px 11%;
+	text-align: center;
+	position: relative;
+	z-index: +1;
+	cursor: pointer;
+	transition-duration: 0.2s;
+}
+
+.s_01 .accordion_one:nth-of-type(2) .accordion_header {
+	background-color: #ff9a05;
+}
+
+.s_01 .accordion_one:nth-of-type(3) .accordion_header {
+	background-color: #1c85d8;
+}
+
+.s_01 .accordion_one .accordion_header:hover {
+	opacity: .8;
+}
+
+.s_01 .accordion_one .accordion_header .i_box {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: 50%;
+	right: 5%;
+	width: 40px;
+	height: 40px;
+	border: 1px solid #fff;
+	margin-top: -20px;
+	box-sizing: border-box;
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+	transform-origin: center center;
+	transition-duration: 0.2s;
+}
+
+.s_01 .accordion_one .accordion_header .i_box .one_i {
+	display: block;
+	width: 18px;
+	height: 18px;
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+	transform-origin: center center;
+	transition-duration: 0.2s;
+	position: relative;
+}
+
+.s_01 .accordion_one .accordion_header.open .i_box {
+	-webkit-transform: rotate(-360deg);
+	transform: rotate(-360deg);
+}
+
+.s_01 .accordion_one .accordion_header .i_box .one_i:before, .s_01 .accordion_one .accordion_header .i_box .one_i:after
+	{
+	display: flex;
+	content: '';
+	background-color: #fff;
+	border-radius: 10px;
+	width: 18px;
+	height: 4px;
+	position: absolute;
+	top: 7px;
+	left: 0;
+	-webkit-transform: rotate(0deg);
+	transform: rotate(0deg);
+	transform-origin: center center;
+}
+
+.s_01 .accordion_one .accordion_header .i_box .one_i:before {
+	width: 4px;
+	height: 18px;
+	top: 0;
+	left: 7px;
+}
+
+.s_01 .accordion_one .accordion_header.open .i_box .one_i:before {
+	content: none;
+}
+
+.s_01 .accordion_one .accordion_header.open .i_box .one_i:after {
+	-webkit-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+}
+
+.s_01 .accordion_one .accordion_inner {
+	display: none;
+	padding: 30px 30px;
+	border-left: 2px solid #db0f2f;
+	border-right: 2px solid #db0f2f;
+	border-bottom: 2px solid #db0f2f;
+	box-sizing: border-box;
+}
+
+.s_01 .accordion_one:nth-of-type(2) .accordion_inner {
+	border-left: 2px solid #ff9a05;
+	border-right: 2px solid #ff9a05;
+	border-bottom: 2px solid #ff9a05;
+}
+
+.s_01 .accordion_one:nth-of-type(3) .accordion_inner {
+	border-left: 2px solid #1c85d8;
+	border-right: 2px solid #1c85d8;
+	border-bottom: 2px solid #1c85d8;
+}
+
+.s_01 .accordion_one .accordion_inner .box_one {
+	height: 300px;
+}
+
+.s_01 .accordion_one .accordion_inner p.txt_a_ac {
+	margin: 0;
+}
+
+@media screen and (max-width: 1024px) {
+	.s_01 .accordion_one .accordion_header {
+		font-size: 18px;
+	}
+	.s_01 .accordion_one .accordion_header .i_box {
+		width: 30px;
+		height: 30px;
+		margin-top: -15px;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.s_01 .accordion_one .accordion_header {
+		font-size: 16px;
+		text-align: left;
+		padding: 15px 60px 15px 15px;
+	}
+}
+
+/*====================================================================
+以下は不要です。
+====================================================================*/
+body {
+	font-family: YuGothic, "游ゴシック体", "Yu Gothic", "ヒラギノ角ゴ Pro",
+		"Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic",
+		sans-serif;
+	font-size: 16px;
+	letter-spacing: .025em;
+	line-height: 1.8;
+	margin: 0;
+}
+
+@media screen and (max-width: 1024px) {
+	body {
+		font-size: 14px;
+	}
+}
+
+.section {
+	max-width: 1024px;
+	margin: 0 auto;
+	padding: 20px 20px 20px;
+}
+
+.section p._a {
+	font-size: 12px;
+	font-weight: bold;
+	margin: 30px 0 0;
+}
+
+.section p._a .link {
+	display: inline-block;
+	color: #607D8B;
+	padding-left: 1.3em;
+	text-indent: -1.3em;
+}
+
+.section p._a .link:before {
+	content: '';
+	display: inline-block;
+	width: 5px;
+	height: 5px;
+	border-top: 2px solid #607D8B;
+	border-right: 2px solid #607D8B;
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+	margin-right: 10px;
+}
+
+table.sample {
+	border-collapse: collapse;
+	margin-left: 100px;
+}
+
+table.sample th {
+	border: 1px solid #000066;
+}
+
+table.sample td {
+	border: 1px solid #000066;
+	background: #ffffff;
+}
+
+.update {
+	margin-right: 20px;
+}
+
+.center {
+	width: 90%;
+}
+
+.bottom_less {
+	margin-top: 18px;
+	margin-bottom: 0px;
+}
+
+.master {
+	margin-top: 30px;
+	margin-right: 50px;
+}
+
+.btn-square {
+	display: inline-block;
+	padding: 0.5em 1em;
+	text-decoration: none;
+	background: #004000; /*ボタン色*/
+	color: #FFF;
+	border-bottom: solid 3px #627295;
+	border-radius: 3px;
+}
+
+.btn-square:active {
+	/*ボタンを押したとき*/
+	-webkit-transform: translateY(4px);
+	transform: translateY(4px); /*下に動く*/
+	border-bottom: none; /*線を消す*/
+}
+
+.update {
+	position: fixed;
+	bottom: 25px;
+	right: 0px;
+}
+
+.chart {
+	margin-left: 100px;
+}
+
+#modal-content {
+	width: 50%;
+	margin: 1.5em auto 0;
+	padding: 10px 20px;
+	border: 2px solid #aaa;
+	background: #fff;
+	z-index: 2;
+	position: fixed;
+}
+
+.modal-p {
+	margin-top: 1em;
+}
+
+.modal-p:first-child {
+	margin-top: 0;
+}
+
+.button-link {
+	color: #00f;
+	text-decoration: underline;
+}
+
+.button-link:hover {
+	cursor: pointer;
+	color: #f00;
+}
+
+
+#modal-overlay{
+	z-index:1;
+	display:none;
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	height:120%;
+	background-color:rgba(0,0,0,0.75);
+}
+
 

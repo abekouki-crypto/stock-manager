@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+.container {
+	text-align: center;
+	margin-top:50px;
+}
+
+.btn{
+	height:50px;
+	width:200px;
+}
