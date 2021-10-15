@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../css/style.css">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="../js/main.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<title>在庫管理メニュー</title>
+</head>
+<body>
+	<div class="right" style="text-align: right">
+		<div class="master">
+			<button type="submit" onclick="location.href='/color_register'"
+				class="btn btn-primary">色マスタ</button>
+			<button type="submit" onclick="location.href='/type_register'"
+				class="btn btn-primary">種別マスタ</button>
+			<button type="submit" onclick="location.href='/product_register'"
+				class="btn btn-primary">商品マスタ</button>
+		</div>
+	</div>
+
+
+	<div class="section s_01">
+		<div class="accordion_one">
+			<div class="accordion_header">
+				商品検索
+				<div class="i_box">
+					<i class="one_i"></i>
+				</div>
+			</div>
+			<div class="accordion_inner">
+				<form action="search">
+					<div class="box_one">
+						<p class="bottom_less">検索</p>
+						<div class="input-group">
+							<input type="text" name="productName" class="form-control"
+								placeholder="テキスト入力欄"> <span class="input-group-btn">
+							</span>
+						</div>
+						<p class="bottom_less">種別</p>
+						<select name="type">
+							<option value="">---</option>
+							<option th:each="type : ${typeList}" th:value="${type.typeName}"
+								th:text="${type.typeName}"></option>
+						</select>
+						<p class="bottom_less">色</p>
+						<select name="color">
+							<option value="">---</option>
+							<option th:each="color : ${colorList}"
+								th:value="${color.colorName}" th:text="${color.colorName}">
+							</option>
+						</select>
+
+						<p class="bottom_less">値段</p>
+						<table>
+							<tr>
+								<td><input type="number" min="0" max="10000000"
+									name="minNum"></td>
+								<td>～</td>
+								<td><input type="number" min="0" max="10000000"
+									name="maxNum"></td>
+							</tr>
+						</table>
+						<div style="text-align: center">
+							<button type="submit" class="btn btn-info">検索</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<h2 th:text="${errmsg}" style="text-align: center;"></h2>
+
+	<form method="POST">
+		<br>
+		<h2 class="chart" th:text="${searchHeader}"></h2>
+		<br>
+		<h3 class="chart" th:text="${notSearchResult}"></h3>
+		<div class="center" th:if="${productList}">
+			<table class="sample text-center" id="test-table">
+
+				<tr class="item_heading">
+					<th width="5%">商品ID</th>
+					<th width="12%">種類</th>
+					<th width="20%">商品名</th>
+					<th width="5%">色</th>
+					<th width="7%">単価</th>
+					<th width="6%">在庫数</th>
+					<th width="7%">更新数量</th>
+					<th width="18%">更新理由</th>
+					<th width="10%">入出庫履歴</th>
+				</tr>
+
+				<tr th:each="product:${productList}">
+					<input type="hidden" name="id" th:value="${product.productId}">
+					<td th:text="${product.productId}"></td>
+					<td th:text="${product.typeName}"></td>
+					<td><a
+						th:href="@{/product_detail/{id}/(id=${product.productId})}"
+						th:text="${product.productName}"></a></td>
+					<td th:text="${product.colorName}"></td>
+					<td class="number_right" th:text="${product.price}"></td>
+					<td class="number_right" th:text="${product.quantity}"></td>
+					<td><input type="number" name="quantity" min="-300" max="300"
+						style="width: 60px;"></td>
+					<td><input type="text" name="logReason" size="39"
+						placeholder="更新理由"></td>
+					<td><button type="submit" formaction="searchLog"
+							class="btn btn-info" name="productId"
+							th:value="${product.productId}">入出庫履歴</button></td>
+				</tr>
+
+			</table>
+		</div>
+		<!-- </form> -->
+		<!-- Modal -->
+		<!-- Button trigger modal -->
+		<div class="update" th:if="${productList}">
+			<a class="btn-square" data-bs-toggle="modal"
+				data-bs-target="#exampleModal">数量更新</a>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="exampleModal" tabindex="-1"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">数量を更新してよろしいでしょうか？</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-bs-dismiss="modal">戻る</button>
+						<button type="submit" class="btn btn-success"
+							formaction="updateQuantity">OK</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<footer class="my-5 pt-5 text-muted text-center text-small">
+		<p class="mb-1">㈲介護福太郎</p>
+	</footer>
+
+</body>
+</html>

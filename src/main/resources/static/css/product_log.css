@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+.container {
+	text-align: center;
+	margin-right:150px;
+}
+
+.product{
+	margin-top:80px;
+	margin-left:150px;
+}
+
+.btn{
+		margin-top:20px;
+		margin-right:150px;
+		width:100px;
+}
