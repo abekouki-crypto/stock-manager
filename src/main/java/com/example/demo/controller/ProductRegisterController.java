@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.controller;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -20,41 +20,35 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.dto.Color;
-import com.example.dto.Product;
 import com.example.dto.Type;
 
 @Controller
-public class ChangeRegistrationController {
-
+public class ProductRegisterController {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
-	// 商品情報変更画面に遷移
-	@RequestMapping(value = "/change_registration", method = RequestMethod.GET)
-	public String main(@RequestParam(name = "id", defaultValue = "noId") int productId, Model model) {
-		System.out.println("change_registrationを通ってます");
+	// 商品登録画面に遷移
+	@RequestMapping(value = "/product_register", method = RequestMethod.GET)
+	public String main(Model model) {
+		System.out.println("product_registerを通ってます");
 
-		Product product = selectProduct(productId);
 		List<Color> colorList = color();
 		List<Type> typeList = type();
 
-		model.addAttribute("productId", productId);
-		model.addAttribute("product", product);
 		model.addAttribute("colorlist", colorList);
 		model.addAttribute("typeList", typeList);
 
-		return "change_registration";
+		return "product_register";
 	}
 
-	// 商品情報を変更してメイン画面に遷移
-	@RequestMapping(value = "/update_one")
-	public String changeRegistrationSuccess(@RequestParam(name = "id", defaultValue = "noId") int productId,
-			@RequestParam(name = "product", defaultValue = "noName") String product,
+	// 商品情報を登録してメインに遷移
+	@RequestMapping("/product_insert")
+	public String productRegisterSuccess(@RequestParam(name = "product", defaultValue = "noName") String product,
 			@RequestParam(name = "type", defaultValue = "noType") String type,
 			@RequestParam(name = "color", defaultValue = "noColor") String color,
 			@RequestParam(name = "price", defaultValue = "0") Integer price, MultipartFile multipartFile, Model model) {
+		System.out.println("ここは通ってますもんね？");
 
-		System.out.println("これがぁ！！！！商品！！！IDダッッッッッッッッッ！！！！！！！！！！" + productId);
 
 		if (!multipartFile.isEmpty()) {
 			try {
@@ -66,10 +60,45 @@ public class ChangeRegistrationController {
 
 		String stripProduct = product.strip();
 
+		// 空欄チェック
+		if (product.equals("noName") || type.equals("noType") || color.equals("noColor") || price == 0) {
+
+			List<Color> colorList = color();
+			List<Type> typeList = type();
+
+			model.addAttribute("colorlist", colorList);
+			model.addAttribute("typeList", typeList);
+
+			String errMsg = "空の欄があります";
+			model.addAttribute("errmsg", errMsg);
+			return "product_register";
+		}
+
+		// 商品名の重複チェック
+		int productCount = productCount(stripProduct);
+		if (0 < productCount) {
+			String errMsg = "すでに登録してある商品名です";
+			model.addAttribute("errmsg", errMsg);
+			return "product_register";
+		}
+
+		// 空文字チェック
+		if ("".equals(stripProduct)) {
+			String errMsg = "商品名を入力してください";
+			model.addAttribute("errmsg", errMsg);
+			return "product_register";
+		}
+
+		// 商品名の最大文字数チェック
+		if (stripProduct.length() > 100) {
+			String errMsg = "最大文字数を超えています";
+			model.addAttribute("errmsg", errMsg);
+			return "product_register";
+		}
+
 		int colorId = colorId(color);
 		int typeId = typeId(type);
-
-		updateOne(stripProduct, typeId, colorId, price, multipartFile, productId);
+		insertProductMaster(stripProduct, typeId, colorId, price, multipartFile);
 
 		return "main_menu";
 	}
@@ -107,6 +136,7 @@ public class ChangeRegistrationController {
 		String sql = "SELECT color_id FROM color_master WHERE color_name = ?;";
 		Map<String, Object> map = jdbcTemplate.queryForMap(sql, color);
 		int colorId = (int) map.get("color_id");
+		System.out.println(colorId);
 		return colorId;
 	}
 
@@ -115,48 +145,13 @@ public class ChangeRegistrationController {
 		String sql = "SELECT type_id FROM type_master WHERE type_name = ?;";
 		Map<String, Object> map = jdbcTemplate.queryForMap(sql, type);
 		int typeId = (int) map.get("type_id");
+		System.out.println(typeId);
 		return typeId;
 	}
 
-	// SQL
-	// 商品情報の一件取得
-	public Product selectProduct(int productId) {
-
-		// SELECT文
-		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT p.product_id AS p_id,t.type_name,p.product_name,c.color_name,p.price,p.picture_path ");
-		sb.append("FROM product_master p INNER JOIN color_master c ON p.color_id = c.color_id ");
-		sb.append("INNER JOIN type_master t ON p.type_id = t.type_id ");
-		sb.append("WHERE p.product_id = ?;");
-
-		String query = sb.toString();
-		// 検索実行、mapで取得した値をproductクラスのインスタンスにセット
-		Map<String, Object> product = jdbcTemplate.queryForMap(query, productId);
-
-		// Mapから値を取得
-		int id = (int) product.get("p_id");
-		String productName = (String) product.get("product_name");
-		String typeName = (String) product.get("type_name");
-		String colorName = (String) product.get("color_name");
-		int price = (int) product.get("price");
-		String picturePath = (String) product.get("picture_path");
-
-		// productクラスに値をセット
-		Product setProduct = new Product();
-		setProduct.setProductId(id);
-		setProduct.setProductName(productName);
-		setProduct.setTypeName(typeName);
-		setProduct.setColorName(colorName);
-		setProduct.setIntPrice(price);
-		// setProduct.setPrice(price);
-		setProduct.setPicture(picturePath);
-
-		return setProduct;
-	}
-
-	// 商品情報を１件更新.
-	public void updateOne(String productName, int typeId, int colorId, int price, MultipartFile multipartFile,
-			int productId) {
+	// 商品マスタ登録用SQL
+	public void insertProductMaster(String productName, int typeId, int colorId, int price,
+			MultipartFile multipartFile) {
 
 		// ファイル名をに現在年月日時分秒にリネーム
 
@@ -178,12 +173,28 @@ public class ChangeRegistrationController {
 		// パスを先頭に付けてファイル名をくっつける
 		File input = new File(picturePath + newFileName);
 		String stringInputName = picturePath + input.getName();
+		System.out.println(stringInputName);
 
-		String query = "UPDATE product_master SET product_name = ? , type_id = ? , color_id = ? , price = ? , picture_path = ? WHERE product_id = ?";
+		StringBuilder sb = new StringBuilder();
+		sb.append("INSERT INTO product_master ");
+		sb.append("(product_name,type_id,color_id,price,picture_path) ");
+		sb.append("VALUES(?,?,?,?,?);");
+		String sql = sb.toString();
+		int num = jdbcTemplate.update(sql, productName, typeId, colorId, price, stringInputName);
+		System.out.println(num + "件登録しました");
+	}
 
-		// １件更新
-		int product = jdbcTemplate.update(query, productName, typeId, colorId, price, stringInputName, productId);
-		System.out.println(product + "件登録しました");
+	// 商品名の重複確認用SQL
+	public int productCount(String productName) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("SELECT COUNT(product_name) ");
+		stringBuilder.append("FROM product_master ");
+		stringBuilder.append("WHERE product_name ='" + productName + "';");
+		String sql = stringBuilder.toString();
+		int count = jdbcTemplate.queryForObject(sql, Integer.class);
+		System.out.println("カウント確認");
+		System.out.println(count);
+		return count;
 	}
 
 	// imgファイルに画像の保存

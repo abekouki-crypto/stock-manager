@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.controller;
 
 import java.sql.Date;
 import java.util.ArrayList;
