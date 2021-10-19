@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.controller;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
