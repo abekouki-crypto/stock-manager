@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>新規登録画面</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+</head>
+  <body>
+    	<div class="py-3 text-center">
+			<h1>在庫管理システム</h1>
+			<h3>ユーザー新規登録</h3>
+		</div>
+  	<form>
+  <div style="text-align:center">
+  	
+  	<div style="text-align:right; width:610px;">メールアドレス:</div>
+    		<div class="form-item">
+     			 <label for="email"></label>
+      			 <input type="email" size="45" name="email" required="required" placeholder="例:hoge@co.jp"></input>
+    		</div>
+    
+    	 
+ 	<div style="text-align:right; width:580px;">パスワード:</div>
+    		<div class="form-item">
+      			<label for="password"></label>
+      			<input type="password" size="45" name="password" required="required" placeholder="例:abcd1234"></input>
+   			</div>
+    	
+    		<p></p>
+    	
+  			<button type="button" style="width:27.5%;" class="btn btn-primary btn-lg">新規登録</button>
+  			
+  		</div> 
+  
+  	<footer class="my-3 pt-5 text-muted text-center text-small">
+		<p class="mb-1">㈲介護福太郎</p>
+	</footer>
+  </form>
+ 
