@@ -1,17 +1,18 @@
 package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.service.InsertTypeService;
+
 @Controller
 public class TypeRegisterController {
 	@Autowired
-	JdbcTemplate jdbcTemplate;
+	InsertTypeService insertTypeService;
 
 	// 種類登録画面に遷移
 	@RequestMapping(value = "/type_register", method = RequestMethod.GET)
@@ -26,7 +27,7 @@ public class TypeRegisterController {
 
 		String stripTypeName = typeName.strip();
 
-		int typeCount = typeCount(stripTypeName);
+		int typeCount = insertTypeService.typeCount(stripTypeName);
 		if (0 < typeCount) {
 			String errMsg = "すでに登録してある種類名です";
 			model.addAttribute("errmsg", errMsg);
@@ -44,25 +45,7 @@ public class TypeRegisterController {
 			model.addAttribute("errmsg", errMsg);
 			return "type_register";
 		}
-		insertType(stripTypeName);
+		insertTypeService.insertType(stripTypeName);
 		return "main_menu";
-	}
-
-	// 種類の登録用SQL
-	public void insertType(String type) {
-		jdbcTemplate.update("INSERT INTO type_master(type_name) Values(?)", type);
-	}
-
-	// 種類の重複確認用SQL
-	public int typeCount(String typeName) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT COUNT(type_name) ");
-		sb.append("FROM type_master ");
-		sb.append("WHERE type_name ='" + typeName + "';");
-		String sql = sb.toString();
-		int count = jdbcTemplate.queryForObject(sql, Integer.class);
-		System.out.println("カウント確認");
-		System.out.println(count);
-		return count;
 	}
 }
